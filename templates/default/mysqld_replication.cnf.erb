@@ -1,0 +1,11 @@
+[mysqld]
+server-id=<%= node[:mysql_replication][:server_id] %>
+<%- if node[:mysql_replication][:role] == "master" -%>
+log-bin=mysql-bin
+innodb_flush_log_at_trx_commit=<%= node[:mysql_replication][:innodb_flush_log_at_trx_commit] %>
+sync_binlog=<%= node[:mysql_replication][:sync_binlog] %>
+<%- elsif node[:mysql_replication][:role] == "slave" -%>
+master-host=<%= node[:mysql_replication][:master_host] %>
+master-user=<%= node[:mysql_replication][:master_user] %>
+master-password=<%= node[:mysql_replication][:master_password] %>
+<%- end -%>
