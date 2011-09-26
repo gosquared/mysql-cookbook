@@ -15,21 +15,15 @@ if node[:mysql_ec2][:ebs_vol_dev]
     }
   end
 
-  service "mysql" do
-    action :stop
-  end
-
   execute "Move MySQL files to the new EBS mount" do
     command %{
       if [ ! -L #{node[:mysql][:datadir]} ]; then
+        /etc/init.d/mysql stop
         mv #{node[:mysql][:datadir]}/* #{node[:mysql_ec2][:path]}/
         rm -fr #{node[:mysql][:datadir]}
         ln -nfs #{node[:mysql_ec2][:path]} #{node[:mysql][:datadir]}
+        /etc/init.d/mysql start
       fi
     }
-  end
-
-  service "mysql" do
-    action :start
   end
 end
