@@ -1,26 +1,28 @@
-default[:mysql][:bind_address]   = ipaddress
-default[:mysql][:port]           = 3306
-default[:mysql][:datadir]        = "/var/lib/mysql"
-default[:mysql][:confdir]        = '/etc/mysql'
-default[:mysql][:socket]         = "/var/run/mysqld/mysqld.sock"
-default[:mysql][:pid_file]       = "/var/run/mysqld/mysqld.pid"
-default[:mysql][:old_passwords]  = 0
+default[:mysql][:bind_address]  = ipaddress
+default[:mysql][:port]          = 3306
+default[:mysql][:datadir]       = "/var/lib/mysql"
+default[:mysql][:confdir]       = '/etc/mysql'
+default[:mysql][:socket]        = "/var/run/mysqld/mysqld.sock"
+default[:mysql][:pid_file]      = "/var/run/mysqld/mysqld.pid"
+default[:mysql][:old_passwords] = 0
 
-default[:mysql][:root_password]  = ""
+default[:mysql][:root_password] = ""
 
-default[:mysql_ec2][:path]     = "/mnt/mysql"
+default[:mysql][:users]         = []
+
+default[:mysql_ec2][:path]         = "/mnt/mysql"
 default[:mysql_ec2][:ebs_vol_dev]  = false
 default[:mysql_ec2][:ebs_vol_size] = 10
 
-default[:mysql_replication][:role] = false
-default[:mysql_replication][:server_id] = 1
+default[:mysql_replication][:role]                           = false
+default[:mysql_replication][:server_id]                      = 1
 default[:mysql_replication][:innodb_flush_log_at_trx_commit] = 1
-default[:mysql_replication][:sync_binlog] = 1
-default[:mysql_replication][:auto_increment_offset] = 2
-default[:mysql_replication][:auto_increment_increment] = 5
-default[:mysql_replication][:master_host] = nil
-default[:mysql_replication][:master_user] = nil
-default[:mysql_replication][:master_password] = nil
+default[:mysql_replication][:sync_binlog]                    = 1
+default[:mysql_replication][:auto_increment_offset]          = 2
+default[:mysql_replication][:auto_increment_increment]       = 5
+default[:mysql_replication][:master_host]                    = nil
+default[:mysql_replication][:master_user]                    = nil
+default[:mysql_replication][:master_password]                = nil
 
 default[:mysql][:allow_remote_root]                 = false
 default[:mysql][:tunable][:back_log]                = "128"
