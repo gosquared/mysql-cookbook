@@ -12,7 +12,7 @@ attribute :username,                  :kind_of => String,  :default => "root"
 attribute :password,                  :kind_of => String
 
 attribute :new_username,              :kind_of => String
-attribute :new_username_privileges,   :kind_of => String,  :default => "SELECT, INSERT, UPDATE, DELETE, INDEX, ALTER"
+attribute :new_username_privileges,   :kind_of => String,  :default => "CREATE, SELECT, INSERT, UPDATE, DELETE, INDEX, ALTER"
 attribute :new_username_host,         :kind_of => String,  :default => "localhost"
 attribute :new_password,              :kind_of => String
 
