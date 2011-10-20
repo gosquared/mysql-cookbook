@@ -34,3 +34,8 @@ template "#{node['mysql']['confdir']}/my.cnf" do
   mode "0644"
   notifies :restart, resources(:service => "mysql"), :immediately
 end
+
+# Don't log to syslog
+file "#{node[:mysql][:confdir]}/conf.d/mysqld_safe_syslog.cnf" do
+  action :delete
+end
