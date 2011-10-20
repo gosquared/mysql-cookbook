@@ -4,6 +4,8 @@ node[:mysql][:users].each do |user, properties|
   hosts = properties[:hosts] || ["localhost"]
   hosts.each do |host|
     properties[:databases].each do |db|
+      next if db == "*"
+
       mysql_database db do
         action :create_db
       end
