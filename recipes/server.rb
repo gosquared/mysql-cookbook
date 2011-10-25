@@ -38,8 +38,9 @@ end
 # Don't log to syslog
 cookbook_file "#{node[:mysql][:confdir]}/conf.d/mysqld_safe_syslog.cnf" do
   cookbook "mysql"
-  source "mysqld_safe_syslog.conf"
+  source "mysqld_safe_syslog.cnf"
   owner "root"
   group "root"
   mode "0644"
+  notifies :restart, :service => "mysql"
 end
