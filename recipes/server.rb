@@ -36,6 +36,10 @@ template "#{node['mysql']['confdir']}/my.cnf" do
 end
 
 # Don't log to syslog
-file "#{node[:mysql][:confdir]}/conf.d/mysqld_safe_syslog.cnf" do
-  action :delete
+cookbook_file "#{node[:mysql][:confdir]}/conf.d/mysqld_safe_syslog.cnf" do
+  cookbook "mysql"
+  source "mysqld_safe_syslog.conf"
+  owner "root"
+  group "root"
+  mode "0644"
 end
