@@ -3,7 +3,7 @@ if node[:mysql_replication] && node[:mysql_replication].has_key(:role)
     cookbook "mysql"
     source "mysqld_replication.cnf.erb"
     mode "0644"
-    notifies :restart, "service[mysql]"
+    notifies :restart, resources(:service => "mysql")
   end
 end
 
