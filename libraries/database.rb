@@ -8,7 +8,11 @@ module MySQL
   module Database
 
     def mysql
-      @mysql ||= ::Mysql.new new_resource.host, "root", node[:mysql][:root_password]
+      @mysql ||= ::Mysql.new(
+        new_resource.host,
+        "root",
+        (ENV['MYSQL_ROOT_PASSWORD'] || node[:mysql][:root_password])
+      )
     end
 
     def close

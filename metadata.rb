@@ -9,3 +9,5 @@ recipe            "mysql::server", "Installs packages required for mysql servers
 recipe            "mysql::server_ec2", "Performs EC2-specific mountpoint manipulation"
 
 supports "ubuntu"
+
+depends "bootstrap" # https://github.com/gchef/bootstrap

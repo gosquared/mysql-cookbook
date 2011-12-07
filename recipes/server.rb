@@ -28,9 +28,27 @@ service "mysql" do
 end
 
 template "#{node['mysql']['confdir']}/my.cnf" do
+  cookbook "mysql"
   source "my.cnf.erb"
   owner "root"
   group "root"
   mode "0644"
-  notifies :restart, resources(:service => "mysql"), :immediately
+  notifies :restart, resources(:service => "mysql")
+end
+
+template "/root/.my.cnf" do
+  cookbook "mysql"
+  source "user.my.cnf.erb"
+  owner "root"
+  group "root"
+  mode "0644"
+  variables(
+    :username => "root",
+    :password => node.mysql.root_password
+  )
+end
+
+bootstrap_profile "root" do
+  match "export MYSQL_ROOT_PASSWORD"
+  string "export MYSQL_ROOT_PASSWORD='#{node.mysql.root_password}'"
 end
