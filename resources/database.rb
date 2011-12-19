@@ -19,5 +19,6 @@ attribute :new_password,              :kind_of => String
 attribute :database,                  :kind_of => String
 attribute :sql,                       :kind_of => String
 attribute :exists,                    :default => false
+attribute :charset,                   :kind_of => String, :default => "utf8"
 
 attribute :mysqldump,                 :kind_of => String
