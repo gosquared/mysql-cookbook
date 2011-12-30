@@ -14,9 +14,10 @@ node[:mysql][:migrate].each do |host|
 
   host[:databases].each do |db, properties|
     bash "Migrating #{db} db from #{host[:hostname]} ..." do
+      cwd "/var/chef/cache"
       code %{
         ssh -t #{host[:username]}@#{host[:hostname]} sudo mysqldump --defaults-file=/root/.my.cnf #{db} | bzip2 > /var/chef/cache/#{db}.sql.bz2
-        rsync --recursive --delete --copy-links --verbose --progress -e #{host[:username]}@#{host[:hostname]} /var/chef/cache/
+        rsync --delete --verbose --progress -e #{host[:username]}@#{host[:hostname]} /var/chef/cache/#{db}.sql.bz2
       }
       only_if(ENV['FORCE'] || "[ ! -f /var/chef/cache/#{db}.sql.bz2 ]")
     end
