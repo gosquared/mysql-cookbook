@@ -48,9 +48,11 @@ template "/root/.my.cnf" do
   )
 end
 
-bootstrap_profile "root" do
-  match "export MYSQL_ROOT_PASSWORD"
-  string "export MYSQL_ROOT_PASSWORD='#{node.mysql.root_password}'"
+bootstrap_system_user "root" do
+  home_basepath ""
+  profile_extras [
+    "export MYSQL_ROOT_PASSWORD='#{node.mysql.root_password}'"
+  ]
 end
 
 # Don't log to syslog
