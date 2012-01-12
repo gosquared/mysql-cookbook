@@ -1,10 +1,4 @@
-if Chef::Util.respond_to?(:wan_up?)
-  skip = Chef::Util.wan_up? ? false : true
-else
-  skip = false
-end
-
-unless skip
+if Chef::Extensions.wan_up?
   node[:mysql][:migrate].each do |host|
     bash "Adding #{host[:hostname]} to known hosts ..." do
       code %{
