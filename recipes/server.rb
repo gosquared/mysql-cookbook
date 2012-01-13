@@ -48,8 +48,8 @@ template "/root/.my.cnf" do
   )
 end
 
-bootstrap_profile "root" do
-  filename "mysql"
+bootstrap_profile "mysql" do
+  username "root"
   params [
     "export MYSQL_ROOT_PASSWORD='#{node.mysql.root_password}'"
   ]
