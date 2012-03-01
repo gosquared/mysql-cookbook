@@ -47,17 +47,17 @@ default[:mysql][:tunable][:query_cache_size]        = "16M"
 default[:mysql][:tunable][:slow_query_log_file]     = "/var/log/mysql/slow.log"
 default[:mysql][:tunable][:long_query_time]         = 2
 
-default[:mysql][:tunable][:expire_logs_days]        = 10
+default[:mysql][:tunable][:expire_logs_days]        = 14
 default[:mysql][:tunable][:max_binlog_size]         = "100M"
 
-default[:mysql][:tunable][:innodb_buffer_pool_size] = "256M"
+default[:mysql][:tunable][:innodb_buffer_pool_size]         = "256M"
 default[:mysql][:tunable][:innodb_additional_mem_pool_size] = 1048576
-default[:mysql][:tunable][:innodb_log_file_size]    = 5242880
-default[:mysql][:tunable][:ignore_builtin_innodb]   = false
-default[:mysql][:tunable][:innodb_log_buffer_size]  = 1048576
+default[:mysql][:tunable][:innodb_log_file_size]            = 5242880
+default[:mysql][:tunable][:ignore_builtin_innodb]           = false
+default[:mysql][:tunable][:innodb_log_buffer_size]          = 1048576
 default[:mysql][:tunable][:innodb_flush_log_at_trx_commit]  = 1
-default[:mysql][:tunable][:innodb_lock_wait_timeout]  = 50
-default[:mysql][:tunable][:innodb_file_per_table]   = false
+default[:mysql][:tunable][:innodb_lock_wait_timeout]        = 50
+default[:mysql][:tunable][:innodb_file_per_table]           = false
 
 default[:mysql][:tunable][:sort_buffer_size]        = 8388608
 default[:mysql][:tunable][:read_buffer_size]        = 131072
