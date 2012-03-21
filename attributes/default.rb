@@ -10,10 +10,6 @@ default[:mysql][:root_password] = ""
 
 default[:mysql][:users]         = []
 
-default[:mysql_ec2][:path]         = "/mnt/mysql"
-default[:mysql_ec2][:ebs_vol_dev]  = false
-default[:mysql_ec2][:ebs_vol_size] = 10
-
 default[:mysql_replication][:role]                           = false
 default[:mysql_replication][:server_id]                      = 1
 default[:mysql_replication][:innodb_flush_log_at_trx_commit] = 1
