@@ -16,6 +16,12 @@ attribute :new_username_privileges,   :kind_of => String,  :default => "CREATE, 
 attribute :new_username_host,         :kind_of => String,  :default => "localhost"
 attribute :new_password,              :kind_of => String
 
+attribute :remote_ssh_host,           :kind_of => String
+attribute :remote_ssh_ip,             :kind_of => String
+attribute :remote_ssh_username,       :kind_of => String
+attribute :remote_ssh_password,       :kind_of => String
+attribute :remote_mysql_defaults,     :kind_of => String,  :default => "~/.my.cnf"
+
 attribute :database,                  :kind_of => String
 attribute :sql,                       :kind_of => String
 attribute :exists,                    :default => false

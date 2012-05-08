@@ -68,6 +68,32 @@ action :query do
   end
 end
 
+action :backup do
+  if Chef::Extensions.wan_up?
+    execute "Backing-up MySQL #{new_resource.name} db on #{new_resource.remote_ssh_host}" do
+      command %{
+        ssh -p #{new_resource.remote_ssh_port} -t #{new_resource.remote_ssh_username}@#{new_resource.remote_ssh_host} \
+        mysqldump --defaults-file=#{new_resource.remote_mysql_defaults} #{new_resource.name} | bzip2 > ~/#{new_resource.mysqldump}
+      }
+    end
+  else
+    Chef::Log.error "WAN is down, can't connect to #{new_resource.remote_ssh_host}"
+  end
+end
+
+action :transfer do
+  if Chef::Extensions.wan_up?
+    execute "Transferring MySQL #{new_resource.mysqldump} db backup from #{new_resource.remote_ssh_host}" do
+      command %{
+        rsync --delete --verbose --progress -e 'ssh -p #{new_resource.remote_ssh_port}' \
+        #{new_resource.remote_ssh_username}@#{new_resource.remote_ssh_host}:~/#{new_resource.mysqldump} ~/
+      }
+    end
+  else
+    Chef::Log.error "WAN is down, can't connect to #{new_resource.remote_ssh_host}"
+  end
+end
+
 # This ought to re-use the same mysql_run method...
 #
 action :import do
@@ -79,7 +105,7 @@ action :import do
     return Chef::Log.error "MySQL dump file must be either gz or bz2, you've given me #{new_resource.mysqldump}"
   end
 
-  execute "Importing database #{new_resource.name} from file #{new_resource.mysqldump}" do
+  execute "Importing MySQL #{new_resource.name} db from file #{new_resource.mysqldump}" do
     command %{
       #{uncompress} < #{new_resource.mysqldump} | mysql -u #{new_resource.username} #{new_resource.name}
     }
@@ -94,4 +120,7 @@ def load_current_resource
 
   @mysqldb = Chef::Resource::MysqlDatabase.new(new_resource.name)
   @mysqldb.database(new_resource.name)
+  if new_resource.name != "*" and !new_resource.mysqldump
+    new_resource.instance_variable_set(:@mysqldump,  "#{new_resource.name}.sql.bz2")
+  end
 end
