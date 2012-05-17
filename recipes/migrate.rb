@@ -15,12 +15,12 @@ if Chef::Extensions.wan_up?
 
     host[:databases].each do |db, properties|
       bash "Migrating #{db} db from #{host[:hostname]} ..." do
-        cwd "/var/chef/cache"
+        cwd "/var/chef"
         code %{
-          ssh -t #{host[:username]}@#{host[:hostname]} sudo mysqldump --defaults-file=/root/.my.cnf #{db} | bzip2 > /var/chef/cache/#{db}.sql.bz2
-          rsync --delete --verbose --progress -e #{host[:username]}@#{host[:hostname]} /var/chef/cache/#{db}.sql.bz2
+          ssh -t #{host[:username]}@#{host[:hostname]} sudo mysqldump --defaults-file=/root/.my.cnf #{db} | bzip2 > /var/chef/#{db}.sql.bz2
+          rsync --delete --verbose --progress -e #{host[:username]}@#{host[:hostname]} /var/chef/#{db}.sql.bz2
         }
-        only_if(ENV['FORCE'] || "[ ! -f /var/chef/cache/#{db}.sql.bz2 ]")
+        only_if(ENV['FORCE'] || "[ ! -f /var/chef/#{db}.sql.bz2 ]")
       end
 
       mysql_database db do
@@ -41,7 +41,7 @@ if Chef::Extensions.wan_up?
       end
 
       mysql_database db do
-        mysqldump "/var/chef/cache/#{db}.sql.bz2"
+        mysqldump "/var/chef/#{db}.sql.bz2"
         action :import
       end
     end
