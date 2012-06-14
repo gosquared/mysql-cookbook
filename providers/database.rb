@@ -83,7 +83,7 @@ action :import do
     command %{
       #{uncompress} < #{new_resource.mysqldump} | mysql -u #{new_resource.username} #{new_resource.name}
     }
-    only_if(ENV['FORCE'] || %{[ ! "$(mysql -e 'use #{new_resource.name}; show tables;')" ]})
+    only_if(ENV['FORCED_MIGRATE'] || %{[ ! "$(mysql -e 'use #{new_resource.name}; show tables;')" ]})
   end
   new_resource.updated_by_last_action(true)
 end
