@@ -2,14 +2,15 @@ if Chef::Extensions.wan_up?
   node[:mysql][:migrate].each do |host|
     bash "Adding #{host[:hostname]} to known hosts ..." do
       code %{
-        for domain in "#{host[:hostname]}" "$(dig +short #{host[:hostname]})"
-        do
+        #for domain in "#{host[:hostname]}"
+        #do
+          domain="#{host[:hostname]}"
           if [ $(ssh-keygen -F $domain | grep -c found) -lt 1 ]; then
             # Create known_hosts file if missing
             [ ! -f ~/.ssh/known_hosts ] && touch ~/.ssh/known_hosts && chmod 600 ~/.ssh/known_hosts
             ssh-keyscan $domain >> ~/.ssh/known_hosts
           fi
-        done
+        #done
       }
     end
 
