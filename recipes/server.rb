@@ -1,23 +1,18 @@
 include_recipe "mysql::client"
+gem "mysql"
 
-directory "/var/cache/local/preseeding" do
-  owner "root"
-  group "root"
-  mode 0755
-  recursive true
-end
+package "debconf-utils"
 
 execute "preseed mysql-server" do
-  command "debconf-set-selections /var/cache/local/preseeding/mysql-server.seed"
-  action :nothing
+  command %{
+    echo mysql-server-5.1 mysql-server/root_password select #{node[:mysql][:root_password]} | debconf-set-selections
+    echo mysql-server-5.1 mysql-server/root_password_again select #{node[:mysql][:root_password]} | debconf-set-selections
+    echo mysql-server-5.1 mysql-server-5.1/start_on_boot boolean true | debconf-set-selections
+  }
 end
-
-template "/var/cache/local/preseeding/mysql-server.seed" do
-  source "mysql-server.seed.erb"
-  owner "root"
-  group "root"
-  mode "0600"
-  notifies :run, resources(:execute => "preseed mysql-server"), :immediately
+# Backwards compatible
+file "/var/cache/local/preseeding/mysql-server.seed" do
+  action :delete
 end
 
 package "mysql-server"
@@ -36,31 +31,23 @@ template "#{node['mysql']['confdir']}/my.cnf" do
   notifies :restart, resources(:service => "mysql")
 end
 
-template "/root/.my.cnf" do
+# As of 5.1.20, MySQL can log to syslog
+cookbook_file "#{node[:mysql][:confdir]}/conf.d/mysqld_log_to_syslog.cnf" do
   cookbook "mysql"
-  source "user.my.cnf.erb"
   owner "root"
   group "root"
   mode "0644"
-  variables(
-    :username => "root",
-    :password => node.mysql.root_password
-  )
+  action (node[:mysql][:syslog] ? :create : :delete)
+  notifies :restart, resources(:service => "mysql"), :delayed
+end
+# Backwards compatibility
+file "#{node[:mysql][:confdir]}/conf.d/mysqld_safe_syslog.cnf" do
+  action :delete
 end
 
-bootstrap_profile "mysql" do
-  username "root"
-  params [
-    "export MYSQL_ROOT_PASSWORD='#{node.mysql.root_password}'"
-  ]
-end
-
-# Don't log to syslog
-cookbook_file "#{node[:mysql][:confdir]}/conf.d/mysqld_safe_syslog.cnf" do
-  cookbook "mysql"
-  source "mysqld_safe_syslog.cnf"
-  owner "root"
-  group "root"
-  mode "0644"
-  notifies :restart, resources(:service => "mysql")
+execute "clear mysql-server-5.1 root password preseed" do
+  command %{
+    echo mysql-server-5.1 mysql-server/root_password select | debconf-set-selections
+    echo mysql-server-5.1 mysql-server/root_password_again select | debconf-set-selections
+  }
 end
