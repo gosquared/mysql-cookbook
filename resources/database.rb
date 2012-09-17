@@ -20,5 +20,6 @@ attribute :database,                  :kind_of => String
 attribute :sql,                       :kind_of => String
 attribute :exists,                    :default => false
 attribute :charset,                   :kind_of => String, :default => "utf8"
+attribute :collation,                 :kind_of => String, :default => "utf8_bin"
 
 attribute :mysqldump,                 :kind_of => String

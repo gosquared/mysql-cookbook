@@ -17,7 +17,7 @@ end
 action :create_db do
   mysql_run("!exists?") do
     Chef::Log.info "mysql_database: Creating database #{new_resource.name}"
-    mysql.query("CREATE DATABASE #{new_resource.name}")
+    mysql.query("CREATE DATABASE #{new_resource.name} CHARACTER SET #{new_resource.charset} COLLATE #{new_resource.collation}")
   end
 end
 
