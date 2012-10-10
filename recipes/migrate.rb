@@ -1,7 +1,5 @@
-wan_up = `ping -c 1 -W 1 8.8.8.8`.index(/1 (?:packets )?received/)
-
-if wan_up
-  node[:mysql][:migrate].each do |host|
+node[:mysql][:migrate].each do |host|
+  if `ping -c 1 -W 1 #{host[:hostname]}`.index(/1 (?:packets )?received/)
     bash "Adding #{host[:hostname]} to known hosts ..." do
       code %{
         #for domain in "#{host[:hostname]}"
@@ -48,5 +46,7 @@ if wan_up
         action :import
       end
     end
+  else
+    Chef::Log.error("MySQL migration: cannot ping #{host[:hostname]}. Are pings allowed? Is the host reachable?")
   end
 end
