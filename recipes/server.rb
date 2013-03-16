@@ -6,8 +6,11 @@ package "debconf-utils"
 execute "preseed mysql-server" do
   command %{
     echo mysql-server-5.1 mysql-server/root_password select #{node[:mysql][:root_password]} | debconf-set-selections
+    echo mysql-server-5.5 mysql-server/root_password select #{node[:mysql][:root_password]} | debconf-set-selections
     echo mysql-server-5.1 mysql-server/root_password_again select #{node[:mysql][:root_password]} | debconf-set-selections
+    echo mysql-server-5.5 mysql-server/root_password_again select #{node[:mysql][:root_password]} | debconf-set-selections
     echo mysql-server-5.1 mysql-server-5.1/start_on_boot boolean true | debconf-set-selections
+    echo mysql-server-5.5 mysql-server-5.5/start_on_boot boolean true | debconf-set-selections
   }
 end
 # Backwards compatible
@@ -18,7 +21,8 @@ end
 package "mysql-server"
 
 service "mysql" do
-  supports :status => true, :restart => true, :reload => true
+  supports :status => true, :start => true, :restart => true, :stop => true, :reload => true
+  provider Chef::Provider::Service::Upstart if node[:mysql][:init] == "upstart"
   action :nothing
 end
 

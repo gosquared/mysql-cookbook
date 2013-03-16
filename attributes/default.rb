@@ -5,6 +5,7 @@ default[:mysql][:confdir]       = '/etc/mysql'
 default[:mysql][:socket]        = '/var/run/mysqld/mysqld.sock'
 default[:mysql][:pid_file]      = '/var/run/mysqld/mysqld.pid'
 default[:mysql][:old_passwords] = 0
+default[:mysql][:init]          = "sysv"
 
 ### Users
 #
