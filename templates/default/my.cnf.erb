@@ -89,8 +89,8 @@ plugin-load=innodb=ha_innodb_plugin.so;innodb_trx=ha_innodb_plugin.so;innodb_loc
 <% end -%>
 innodb_buffer_pool_size = <%= node[:mysql][:innodb][:buffer_pool_size] %>
 innodb_additional_mem_pool_size = <%= node[:mysql][:innodb][:additional_mem_pool_size] %>
-innodb_log_file_size = <%= node[:mysql][:innodb][:log_file_size] %>
-innodb_log_buffer_size = <%= node[:mysql][:innodb][:log_buffer_size] %>
+#innodb_log_file_size = <%= node[:mysql][:innodb][:log_file_size] %>
+#innodb_log_buffer_size = <%= node[:mysql][:innodb][:log_buffer_size] %>
 innodb_flush_log_at_trx_commit = <%= node[:mysql][:innodb][:flush_log_at_trx_commit] %>
 innodb_lock_wait_timeout = <%= node[:mysql][:innodb][:lock_wait_timeout] %>
 <% if node[:mysql][:innodb][:file_per_table] -%>
