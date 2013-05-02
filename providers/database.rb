@@ -21,10 +21,24 @@ action :create_db do
   end
 end
 
+action :drop_db do
+  mysql_run("exists?") do
+    Chef::Log.info "mysql_database: Dropping database #{new_resource.name}"
+    mysql.query("DROP DATABASE #{new_resource.name}")
+  end
+end
+
 action :create_user do
   mysql_run("!user_exists?") do
     Chef::Log.info "Creating user #{new_resource.new_username}"
     mysql.query("CREATE USER '#{new_resource.new_username}'@'#{new_resource.new_username_host}' IDENTIFIED BY '#{new_resource.new_password}'")
+  end
+end
+
+action :drop_user do
+  mysql_run("user_exists?") do
+    Chef::Log.info "Dropping user #{new_resource.new_username}"
+    mysql.query("DROP USER '#{new_resource.new_username}'")
   end
 end
 

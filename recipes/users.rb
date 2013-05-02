@@ -6,7 +6,7 @@ node[:mysql][:users].each do |user, properties|
     properties[:databases].each do |db|
       unless db == "*"
         mysql_database db do
-          action :create_db
+          action properties.fetch(:action, :create_db)
         end
       end
 
@@ -15,7 +15,7 @@ node[:mysql][:users].each do |user, properties|
         new_password properties[:password]
         new_username_host host
         new_username_privileges properties[:privileges]
-        action :grant_privileges
+        action properties.fetch(:action, :grant_privileges)
       end
     end
   end
